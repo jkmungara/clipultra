@@ -12,6 +12,11 @@ struct WatcherTests {
         [["public.png": png, "Apple PNG pasteboard type": png]]
     }
 
+    @Test("The clipboard is checked every 0.02 s by default")
+    func defaultInterval() {
+        #expect(WatcherConfig.defaultInterval == 0.02)
+    }
+
     @Test("What is on the clipboard at start is not touched")
     func startsFromCurrentContents() async {
         let clip = FakeClipboard()

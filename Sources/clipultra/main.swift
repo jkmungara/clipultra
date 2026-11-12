@@ -2,7 +2,7 @@ import AppKit
 import ClipCore
 import Foundation
 
-let version = "1.0.0"
+let version = "1.0.1"
 
 let usage = """
 clipultra \(version): compresses screenshots on the macOS clipboard to JPEG.
@@ -18,7 +18,7 @@ OPTIONS:
   --max-width <pixels>  Scale wider images down to this width; 0 keeps full size (default 2560)
   --min-kb <KB>         Leave images smaller than this alone (default 300)
   --save-dir <folder>   Also save each JPEG in this folder (default: save nothing)
-  --interval <seconds>  How often to look at the clipboard (default 0.1)
+  --interval <seconds>  How often to look at the clipboard (default \(WatcherConfig.defaultInterval))
   --verbose             Also log clipboard changes that were left alone, and why
   --version             Print the version
   --help                Print this help
@@ -30,7 +30,7 @@ func fail(_ message: String) -> Never {
 }
 
 var config = WatcherConfig()
-var interval = 0.1
+var interval = WatcherConfig.defaultInterval
 var verbose = false
 
 var args = Array(CommandLine.arguments.dropFirst())
@@ -53,7 +53,7 @@ while !args.isEmpty {
     case "--save-dir":
         config.saveDirectory = URL(fileURLWithPath: (value(flag) as NSString).expandingTildeInPath, isDirectory: true)
     case "--interval":
-        guard let s = Double(value(flag)), s >= 0.02, s <= 10 else { fail("--interval must be between 0.02 and 10 seconds") }
+        guard let s = Double(value(flag)), s >= 0.01, s <= 10 else { fail("--interval must be between 0.01 and 10 seconds") }
         interval = s
     case "--verbose": verbose = true
     case "--version": print("clipultra \(version)"); exit(0)
@@ -94,7 +94,7 @@ timer.setEventHandler {
 }
 timer.resume()
 let width = config.options.maxWidth.map { "\($0) px" } ?? "full size"
-log("clipultra \(version) watching the clipboard (quality \(config.options.quality), max width \(width), "
+log("clipultra \(version) watching the clipboard every \(interval) s (quality \(config.options.quality), max width \(width), "
     + "min \(config.minBytes / 1024) KB, save \(config.saveDirectory?.path ?? "off"))")
 
 dispatchMain()

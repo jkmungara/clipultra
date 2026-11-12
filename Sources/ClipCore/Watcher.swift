@@ -41,6 +41,11 @@ public final class SystemClipboard: Clipboard {
 }
 
 public struct WatcherConfig: Sendable {
+    /// Seconds between clipboard checks. A check reads only the clipboard's change counter
+    /// (about 1 microsecond), so checking 50 times a second costs almost nothing and a screenshot
+    /// waits about 10 ms on average before compression starts (50 ms at 0.1 s).
+    public static let defaultInterval: Double = 0.02
+
     public var options: CompressOptions
     /// Images smaller than this are left alone.
     public var minBytes: Int

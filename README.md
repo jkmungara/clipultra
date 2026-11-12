@@ -31,7 +31,7 @@ and copy a screenshot. Each compressed image is logged with its size before and 
 | `--max-width <pixels>` | `2560` | Images wider than this are scaled down to this width. `0` keeps the full size. |
 | `--min-kb <KB>` | `300` | Images smaller than this are left alone. |
 | `--save-dir <folder>` | none | Also saves each JPEG in this folder, never overwriting a file. |
-| `--interval <seconds>` | `0.1` | How often the clipboard is checked. |
+| `--interval <seconds>` | `0.02` | How often the clipboard is checked (0.01 to 10). |
 | `--verbose` | off | Also logs clipboard changes that were left alone, and why. |
 
 To pass options to the installed service, add them under `ProgramArguments` in
@@ -59,7 +59,9 @@ Details:
 
 ## How it works
 
-clipultra checks the clipboard's change counter every 0.1 seconds, which costs almost nothing.
+clipultra checks the clipboard's change counter every 0.02 seconds. One check takes about one
+microsecond, so this costs almost nothing, and a new screenshot waits about 10 ms on average
+before compression starts.
 It does nothing while the clipboard is unchanged. When something new is copied:
 
 1. It reads the clipboard on the main thread.
