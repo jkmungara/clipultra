@@ -9,7 +9,23 @@ picture copied from a web page and a file copied in Finder also put an image on 
 next to text, HTML or a file link. clipultra leaves those alone, so pasting still gives you what
 you copied.
 
-## Install
+## Download
+
+The [latest release](https://github.com/jkmungara/clipultra/releases/latest) has a ready-made
+binary for Apple Silicon and Intel Macs (macOS 13 or later). The binary is not notarized by
+Apple, so remove the download quarantine before the first run:
+
+```sh
+unzip clipultra-1.0.1-macos-universal.zip
+cd clipultra-1.0.1
+xattr -d com.apple.quarantine clipultra
+./clipultra --version
+sudo install -m 755 clipultra /usr/local/bin/   # optional: put it on your PATH
+```
+
+Changes in each version are in [CHANGELOG.md](CHANGELOG.md).
+
+## Install from source
 
 Needs macOS 13 or later and Xcode 16 (Swift 6) or later.
 
